@@ -374,6 +374,10 @@ jobs:
 
     # Deprecated, see https://docs.github.com/en/actions/monitoring-and-troubleshooting-workflows/enabling-debug-logging
     VERBOSE: false
+
+    # The working directory where the action will be run.
+    # Defaults to the current working directory
+    WORKING_DIRECTORY: "/working-directory"
 ```
 
 ### Commenting on the PR on the `push` event

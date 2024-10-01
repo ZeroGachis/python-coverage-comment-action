@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import contextlib
 import functools
 import logging
 import os
+import pathlib
 import sys
 
 import httpx
@@ -31,22 +33,28 @@ def main():
         logging.getLogger().handlers[0].formatter = log_utils.GitHubFormatter()
 
         log.info("Starting action")
-        config = settings.Config.from_environ(environ=os.environ)
 
-        github_session = httpx.Client(
-            base_url="https://api.github.com",
-            follow_redirects=True,
-            headers={"Authorization": f"token {config.GITHUB_TOKEN}"},
+        working_directory = (
+            settings.get_working_directory_from_environ(environ=os.environ)
+            or pathlib.Path.cwd()
         )
-        http_session = httpx.Client()
-        git = subprocess.Git()
+        with contextlib.chdir(working_directory):
+            config = settings.Config.from_environ(environ=os.environ)
 
-        exit_code = action(
-            config=config,
-            github_session=github_session,
-            http_session=http_session,
-            git=git,
-        )
+            github_session = httpx.Client(
+                base_url="https://api.github.com",
+                follow_redirects=True,
+                headers={"Authorization": f"token {config.GITHUB_TOKEN}"},
+            )
+            http_session = httpx.Client()
+            git = subprocess.Git()
+
+            exit_code = action(
+                config=config,
+                github_session=github_session,
+                http_session=http_session,
+                git=git,
+            )
 
         log.info("Ending action")
         sys.exit(exit_code)

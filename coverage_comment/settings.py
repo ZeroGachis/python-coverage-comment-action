@@ -18,6 +18,14 @@ class InvalidAnnotationType(Exception):
     pass
 
 
+def get_working_directory_from_environ(
+    environ: MutableMapping[str, str],
+) -> pathlib.Path | None:
+    working_directory = environ.get("WORKING_DIRECTORY")
+    if working_directory:
+        return pathlib.Path(working_directory)
+
+
 def path_below(path_str: str | pathlib.Path) -> pathlib.Path:
     try:
         return pathlib.Path(path_str).resolve().relative_to(pathlib.Path.cwd())

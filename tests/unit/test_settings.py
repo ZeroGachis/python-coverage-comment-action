@@ -24,6 +24,16 @@ def test_config__from_environ__missing():
         settings.Config.from_environ({})
 
 
+def test_get_working_directory_from_environ__ok():
+    assert settings.get_working_directory_from_environ(
+        {"WORKING_DIRECTORY": "/working-directory"}
+    ) == pathlib.Path("/working-directory")
+
+
+def test_get_working_directory_from_environ__missing():
+    assert settings.get_working_directory_from_environ({}) is None
+
+
 def test_config__from_environ__ok():
     assert settings.Config.from_environ(
         {

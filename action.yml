@@ -99,6 +99,11 @@ inputs:
     description: >
       Deprecated, see https://docs.github.com/en/actions/monitoring-and-troubleshooting-workflows/enabling-debug-logging
     default: false
+  WORKING_DIRECTORY:
+    description: >
+      The working directory where the action will be run.
+      Defaults to the current working directory
+    required: false
 outputs:
   COMMENT_FILE_WRITTEN:
     description: >
@@ -125,3 +130,4 @@ runs:
     ANNOTATE_MISSING_LINES: ${{ inputs.ANNOTATE_MISSING_LINES }}
     ANNOTATION_TYPE: ${{ inputs.ANNOTATION_TYPE }}
     VERBOSE: ${{ inputs.VERBOSE }}
+    WORKING_DIRECTORY: ${{ inputs.WORKING_DIRECTORY }}
